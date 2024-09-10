@@ -17,8 +17,18 @@ mv config.yaml.ex config.yaml
 
 
  编译运行
+## 编译
+Linux编译
+```shell
+go build -ldflags "-s -w" -o earth main.go
+```
 
-`go build main.go`
+windows下交叉编译
+```shell
+set GOOS=linux
+set GOARCH=amd64
+go build -ldflags "-s -w" -o earth main.go
+```
 
 #### 使用说明
 
