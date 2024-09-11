@@ -5,26 +5,29 @@ import (
 	"log"
 	"os"
 	"ser163.cn/earthworm/config"
+	"ser163.cn/earthworm/dao"
 	"ser163.cn/earthworm/feishu"
 	"ser163.cn/earthworm/read"
 )
 
 func main() {
 	conf := config.GetConfig()
-	db, err := ConnectDatabase(conf)
+	sqlLitedb, err := dao.ConnectDatabase(conf)
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
 
 	// 获取业务本地数据
-	Mysqldb, err := ConnectMysqlDatabase(conf)
+	Mysqldb, err := dao.ConnectMysqlDatabase(conf)
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
-	defer db.Close()
+
+	defer sqlLitedb.Close()
 	defer Mysqldb.Close()
+
 	// 获取需要更新的数据
-	readClient := read.NewReadLib(Mysqldb, db)
+	readClient := read.NewReadLib(Mysqldb, sqlLitedb)
 
 	records, err := readClient.Transfer()
 	if err != nil {
@@ -32,7 +35,7 @@ func main() {
 		os.Exit(1)
 	}
 	// 调用飞书方法
-	feishuClient := feishu.NewFeiShuLib(db)
+	feishuClient := feishu.NewFeiShuLib(sqlLitedb)
 
 	// 新建飞书任务字段
 	_, err = feishuClient.NewBatchCreateRecord(records)
