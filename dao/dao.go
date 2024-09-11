@@ -26,12 +26,12 @@ func ConnectDatabase(config *config.Config) (*sql.DB, error) {
 		// 获取程序根目录
 		baseDir := filepath.Dir(execPath)
 		// 创建配置文件的完整路径
-		fmt.Printf("sqlite db: %s\n", source)
 		source := filepath.Join(baseDir, source)
 		if !utils.FileExists(source) {
 			return nil, fmt.Errorf("%s does not exist", source)
 		}
 	}
+	fmt.Printf("sqlite db: %s\n", source)
 	db, err := sql.Open(config.Database.Driver, source)
 	if err != nil {
 		return nil, err
