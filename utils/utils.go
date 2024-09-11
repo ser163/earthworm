@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"time"
 )
@@ -30,6 +31,16 @@ func GenerateIDList(start, end int64) []int64 {
 		ids = append(ids, i)
 	}
 	return ids
+}
+
+// 判断文件是否存在
+
+func FileExists(filename string) bool {
+	_, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return err == nil
 }
 
 // 辅助函数: 生成 SQL 查询占位符
