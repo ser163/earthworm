@@ -31,7 +31,7 @@ func ConnectDatabase(config *config.Config) (*sql.DB, error) {
 			return nil, fmt.Errorf("%s does not exist", source)
 		}
 	}
-	db, err := sql.Open(config.Database.Driver, config.Database.Source)
+	db, err := sql.Open(config.Database.Driver, source)
 	if err != nil {
 		return nil, err
 	}
