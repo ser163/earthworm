@@ -26,6 +26,7 @@ func ConnectDatabase(config *config.Config) (*sql.DB, error) {
 		// 获取程序根目录
 		baseDir := filepath.Dir(execPath)
 		// 创建配置文件的完整路径
+		log.Fatalf("sqlite db: %s", source)
 		source := filepath.Join(baseDir, source)
 		if !utils.FileExists(source) {
 			return nil, fmt.Errorf("%s does not exist", source)
