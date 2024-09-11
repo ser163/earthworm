@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"os"
+	"path/filepath"
 	"sync"
 )
 
@@ -59,7 +60,19 @@ func GetConfig() *Config {
 }
 
 func ReadConfig(filename string) (*Config, error) {
-	file, err := os.Open(filename)
+	// 获取程序的执行路径
+	execPath, err := os.Executable()
+	if err != nil {
+		return nil, err
+	}
+
+	// 获取程序根目录
+	baseDir := filepath.Dir(execPath)
+
+	// 创建配置文件的完整路径
+	configPath := filepath.Join(baseDir, filename)
+
+	file, err := os.Open(configPath)
 	if err != nil {
 		return nil, err
 	}
