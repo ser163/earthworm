@@ -40,7 +40,7 @@ func FileExists(filename string) bool {
 	if os.IsNotExist(err) {
 		return false
 	}
-	return err == nil
+	return true
 }
 
 // 辅助函数: 生成 SQL 查询占位符
