@@ -5,13 +5,32 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
+	"os"
+	"path/filepath"
 	"ser163.cn/earthworm/config"
+	"ser163.cn/earthworm/utils"
 	"strconv"
 	"time"
 )
 
 // 连接Sqlite
 func ConnectDatabase(config *config.Config) (*sql.DB, error) {
+	source := config.Database.Source
+	if !utils.FileExists(source) {
+		// 获取程序的执行路径
+		execPath, err := os.Executable()
+		if err != nil {
+			return nil, err
+		}
+
+		// 获取程序根目录
+		baseDir := filepath.Dir(execPath)
+		// 创建配置文件的完整路径
+		source := filepath.Join(baseDir, source)
+		if !utils.FileExists(source) {
+			return nil, fmt.Errorf("%s does not exist", source)
+		}
+	}
 	db, err := sql.Open(config.Database.Driver, config.Database.Source)
 	if err != nil {
 		return nil, err
